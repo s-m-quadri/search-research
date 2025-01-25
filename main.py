@@ -87,6 +87,7 @@ def clean_input():
 
 # Create the main window
 root = tk.Tk()
+# root.iconbitmap("icon.ico")
 root.title("Search Research")
 root.geometry(f"750x600")
 
