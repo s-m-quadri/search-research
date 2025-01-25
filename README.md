@@ -1,22 +1,26 @@
-# 🔍 Search Research  
+
+![sr](https://github.com/user-attachments/assets/d200809c-68ef-4b08-b1b6-ab38fb7bd1e2)
+
+
+# Search Research  
 
 A lightweight and user-friendly application to search for research papers from the **arXiv** repository with ease.  
 
-## 🚀 Features  
+## 📌 Features  
 
 - **Dynamic Search**: Query research papers from **arXiv** with a customizable result limit.  
 - **Interactive GUI**: Built with Python's [`tkinter`](https://docs.python.org/3/library/tkinter.html) for simplicity and ease of use.  
 - **Enhanced Accessibility**: Links to papers, DOI, and Sci-Hub (if available) are clickable directly from the results.  
 - **Customizable Theme**: A clean and vibrant color palette for better readability and aesthetics.  
 
-## Tech Stack  
+## 📌 Tech Stack  
 
 - **Programming Language**: Python  
 - **Libraries Used**:  
   - [`tkinter`](https://docs.python.org/3/library/tkinter.html) for GUI development  
   - [`arXiv`](https://pypi.org/project/arxiv/) for querying research papers  
 
-## About arXiv  
+## 📌 About arXiv  
 
 [arXiv](https://arxiv.org/) is a project by the Cornell University Library, providing open access to over **1,000,000+** articles in diverse fields such as:  
 
@@ -29,14 +33,14 @@ A lightweight and user-friendly application to search for research papers from t
 
 This application leverages the [arXiv Python wrapper](https://pypi.org/project/arxiv/) for seamless integration with their API.  
 
-## 🎨 Theming  
+## 📌 Theming  
 
 This application uses a carefully chosen color palette for a professional yet visually appealing design:  
 
 - **Palette**: `#FEF9E1`, `#E5D0AC`, `#A31D1D`, and `#6D2323`  
 - Sourced from [colorhunt.co](https://colorhunt.co/palette/fef9e1e5d0aca31d1d6d2323).  
 
-## 🖥️ How to Run  
+## 📌 How to Run  
 
 1. **Prerequisites**:  
    - Python 3.7 or above  
@@ -52,7 +56,7 @@ This application uses a carefully chosen color palette for a professional yet vi
    python app.py  
    ```  
 
-## 📦 Distribution  
+## 📌 Distribution  
 
 To create an executable file:  
 
@@ -68,10 +72,10 @@ To create an executable file:
 
 The `.exe` file will be located in the `dist` folder.  
 
-## 🤝 Contribution  
+## 📌 Contribution  
 
 Contributions are welcome! If you have suggestions for new features, improvements, or bug fixes, feel free to open an issue or submit a pull request.  
 
-## 📄 License  
+## 📌 License  
 
 This project is licensed under the **GPL-3.0 License**. For more details, see the [LICENSE](LICENSE) file.  
