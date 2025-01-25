@@ -84,7 +84,7 @@ Contributions are welcome! If you have suggestions for new features, improvement
 
 ## Credits
 
-This project is contributed by @SuyashAtkane
+This project is contributed by https://github.com/SuyashAtkane
 
 ## License  
 
