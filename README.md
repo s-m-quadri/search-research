@@ -43,20 +43,26 @@ This application uses a carefully chosen color palette for a professional yet vi
 ## 📌 How to Run  
 
 1. **Prerequisites**:  
-   - Python 3.7 or above  
-   - Required libraries: `arxiv`, `tkinter` (pre-installed with Python)  
-
+   - Python 3.12.6  
+   
 2. **Install Dependencies**:  
    ```bash  
-   pip install arxiv  
+   pip install -r requirements.txt  
    ```  
+
+> [!IMPORTANT]
+> Non-windows users must remove this line before execution from `main.py`, since it's only compatible with Windows operating system
+> ```
+> root.iconbitmap(resource_path("icon.ico"))
+> ```
+> **Tl'dr:** Comment or remove above line before run!
 
 3. **Run the Application**:  
    ```bash  
-   python app.py  
+   python main.py  
    ```  
 
-## 📌 Distribution  
+## 📌 Build  
 
 To create an executable file:  
 
@@ -67,7 +73,7 @@ To create an executable file:
 
 2. Create the `.exe` file:  
    ```bash  
-   pyinstaller --onefile --windowed app.py  
+   pyinstaller search-research.spec --clean  
    ```  
 
 The `.exe` file will be located in the `dist` folder.  

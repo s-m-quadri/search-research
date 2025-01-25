@@ -3,6 +3,15 @@ import tkinter as tk
 from tkinter import ttk, scrolledtext
 import arxiv
 import threading
+import sys
+import os
+
+def resource_path(relative_path):
+    """ Get the absolute path to the resource, works for dev and for PyInstaller """
+    if hasattr(sys, '_MEIPASS'):
+        # PyInstaller creates a temp folder and stores files there
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
 
 # Function to perform the search
 def search_papers():
@@ -87,7 +96,7 @@ def clean_input():
 
 # Create the main window
 root = tk.Tk()
-root.iconbitmap("icon.ico")
+root.iconbitmap(resource_path("icon.ico"))
 root.title("Search Research")
 root.geometry(f"750x600")
 
