@@ -52,7 +52,7 @@ def search_papers():
                 doi = result.doi if result.doi else "DOI not available"
                 sci_hub_url = f"https://sci-hub.se/{result.doi}" if result.doi else "Sci-Hub link not available"
 
-                result_field.insert(tk.END, f"{idx}. {title}")
+                result_field.insert(tk.END, f"{idx}. {title}\n")
                 result_field.insert(tk.END, f"DOI: {doi}\n")
                 result_field.insert(tk.END, f"{url}\n", ("link", url))
                 result_field.insert(tk.END, f"{sci_hub_url}\n\n", ("link", sci_hub_url))
