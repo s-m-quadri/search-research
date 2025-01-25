@@ -6,27 +6,31 @@ import threading
 # Function to perform the search
 def search_papers():
     # Disable the search button and show status
-    search_button.config(state=tk.DISABLED)
-    status_label.config(text="Searching...")
+    search_button.config(state=tk.DISABLED, text="Searching...")
     
     def perform_search():
         # Clear the results field
         result_field.delete(1.0, tk.END)
 
-        # Get the query from the text field
+        # Get the query and result limit from the fields
         query = search_entry.get(1.0, tk.END).strip()
+        try:
+            result_limit = int(result_limit_entry.get().strip())
+        except ValueError:
+            result_field.insert(tk.END, "Please enter a valid number for result limit.")
+            search_button.config(state=tk.NORMAL, text="Search")
+            return
 
         if not query:
             result_field.insert(tk.END, "Please enter a search term.")
-            status_label.config(text="Idle")
-            search_button.config(state=tk.NORMAL)
+            search_button.config(state=tk.NORMAL, text="Search")
             return
 
         try:
             # Query arXiv for research papers
             search = arxiv.Search(
                 query=query,
-                max_results=30,
+                max_results=result_limit,
                 sort_by=arxiv.SortCriterion.Relevance
             )
 
@@ -37,7 +41,7 @@ def search_papers():
                 doi = result.doi if result.doi else "DOI not available"
                 sci_hub_url = f"https://sci-hub.se/{result.doi}" if result.doi else "Sci-Hub link not available"
 
-                result_field.insert(tk.END, f"{idx}.\n")
+                result_field.insert(tk.END, f"{idx}.")
                 result_field.insert(tk.END, f"Title: {title}\n")
                 result_field.insert(tk.END, f"DOI: {doi}\n")
                 result_field.insert(tk.END, f"Link: {url}\n", ("link", url))
@@ -49,9 +53,8 @@ def search_papers():
         except Exception as e:
             result_field.insert(tk.END, f"An error occurred: {str(e)}")
         finally:
-            # Re-enable the search button and update status
-            search_button.config(state=tk.NORMAL)
-            status_label.config(text="Idle")
+            # Re-enable the search button
+            search_button.config(state=tk.NORMAL, text="Search")
 
     threading.Thread(target=perform_search).start()
 
@@ -76,17 +79,22 @@ root = tk.Tk()
 root.title("Research Paper Search")
 root.geometry(f"750x600")
 
+# Set background color
+root.configure(bg="#FEF9E1")
+
 # Add title and subtitle
-title_label = tk.Label(root, text="Research Paper Search", font=("Arial", 32, "bold")).pack(pady=(15,1))
-subtitle_label = tk.Label(root, text="Search for research papers with ease", font=("Arial", 12)).pack(pady=(1, 15))
+title_label = tk.Label(root, text="Research Paper Search", font=("Arial", 32, "bold"), bg="#FEF9E1", fg="#6D2323")
+title_label.pack(pady=(15, 1))
+subtitle_label = tk.Label(root, text="Search for research papers with ease", font=("Arial", 12), bg="#FEF9E1", fg="#000")
+subtitle_label.pack(pady=(1, 15))
 
 # Create the multi-line text entry field
-search_label = ttk.Label(root, text="Enter your search query:")
+search_label = tk.Label(root, text="Enter your search query:", bg="#FEF9E1", fg="#000")
 search_label.pack(pady=5)
-search_entry = scrolledtext.ScrolledText(root, wrap=tk.WORD, height=5, width=70)
+search_entry = scrolledtext.ScrolledText(root, wrap=tk.WORD, height=5, width=70, bg="#E5D0AC")
 search_entry.pack(pady=5)
 
-# Create the buttons (Search, Clear Input, Clear Output) in a row
+# Create the buttons and result limit input in a row
 button_frame = ttk.Frame(root)
 button_frame.pack(pady=10)
 
@@ -99,14 +107,17 @@ clear_input_button.grid(row=0, column=1, padx=5)
 clear_output_button = ttk.Button(button_frame, text="Clear Output", command=lambda: result_field.delete(1.0, tk.END))
 clear_output_button.grid(row=0, column=2, padx=5)
 
-# Add a status label
-status_label = tk.Label(root, text="Idle", font=("Arial", 10), fg="green")
-status_label.pack(pady=5)
+result_limit_label = tk.Label(button_frame, text="Results Limit:")
+result_limit_label.grid(row=0, column=3, padx=5)
+
+result_limit_entry = tk.Entry(button_frame, width=5, bg="#E5D0AC")
+result_limit_entry.grid(row=0, column=4, padx=5)
+result_limit_entry.insert(0, "30")
 
 # Create the result field (a scrolled text widget)
-result_label = ttk.Label(root, text="Search Results:")
+result_label = tk.Label(root, text="Search Results:", bg="#FEF9E1", fg="#000")
 result_label.pack(pady=5)
-result_field = scrolledtext.ScrolledText(root, wrap=tk.WORD, height=20, width=70)
+result_field = scrolledtext.ScrolledText(root, wrap=tk.WORD, height=20, width=70, bg="#E5D0AC")
 result_field.pack(pady=5)
 
 # Run the application
