@@ -80,7 +80,11 @@ The `.exe` file will be located in the `dist` folder.
 
 ## Contribution  
 
-Contributions are welcome! If you have suggestions for new features, improvements, or bug fixes, feel free to open an issue or submit a pull request. ~@SuyashAtkane 
+Contributions are welcome! If you have suggestions for new features, improvements, or bug fixes, feel free to open an issue or submit a pull request.
+
+## Credits
+
+This project is contributed by @SuyashAtkane
 
 ## License  
 
