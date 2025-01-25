@@ -1,3 +1,4 @@
+import re
 import tkinter as tk
 from tkinter import ttk, scrolledtext
 import arxiv
@@ -14,6 +15,7 @@ def search_papers():
 
         # Get the query and result limit from the fields
         query = search_entry.get(1.0, tk.END).strip()
+        
         try:
             result_limit = int(result_limit_entry.get().strip())
         except ValueError:
@@ -41,14 +43,13 @@ def search_papers():
                 doi = result.doi if result.doi else "DOI not available"
                 sci_hub_url = f"https://sci-hub.se/{result.doi}" if result.doi else "Sci-Hub link not available"
 
-                result_field.insert(tk.END, f"{idx}.")
-                result_field.insert(tk.END, f"Title: {title}\n")
+                result_field.insert(tk.END, f"{idx}. {title}")
                 result_field.insert(tk.END, f"DOI: {doi}\n")
-                result_field.insert(tk.END, f"Link: {url}\n", ("link", url))
-                result_field.insert(tk.END, f"Sci-Hub: {sci_hub_url}\n\n", ("link", sci_hub_url))
+                result_field.insert(tk.END, f"{url}\n", ("link", url))
+                result_field.insert(tk.END, f"{sci_hub_url}\n\n", ("link", sci_hub_url))
 
             # Make links clickable
-            result_field.tag_configure("link", foreground="blue", underline=True)
+            result_field.tag_configure("link", foreground="#6D2323", underline=True)
             result_field.tag_bind("link", "<Button-1>", lambda e: open_link(e))
         except Exception as e:
             result_field.insert(tk.END, f"An error occurred: {str(e)}")
@@ -73,18 +74,28 @@ def open_link(event):
 def clear_fields():
     search_entry.delete(1.0, tk.END)
     result_field.delete(1.0, tk.END)
+    
+    
+# Function to clean input
+# i.e. Remove non-alphanumeric characters (except spaces)
+def clean_input():
+    query = search_entry.get(1.0, tk.END).strip()
+    cleaned_query = re.sub(r'[^a-zA-Z0-9\s]', '', query)
+    search_entry.delete(1.0, tk.END)
+    search_entry.insert(tk.END, cleaned_query)
+
 
 # Create the main window
 root = tk.Tk()
-root.title("Research Paper Search")
+root.title("Search Research")
 root.geometry(f"750x600")
 
 # Set background color
 root.configure(bg="#FEF9E1")
 
 # Add title and subtitle
-title_label = tk.Label(root, text="Research Paper Search", font=("Arial", 32, "bold"), bg="#FEF9E1", fg="#6D2323")
-title_label.pack(pady=(15, 1))
+title_label = tk.Label(root, text="Search Research", font=("Arial", 32, "bold"), bg="#FEF9E1", fg="#6D2323")
+title_label.pack(pady=(35, 1))
 subtitle_label = tk.Label(root, text="Search for research papers with ease", font=("Arial", 12), bg="#FEF9E1", fg="#000")
 subtitle_label.pack(pady=(1, 15))
 
@@ -95,30 +106,35 @@ search_entry = scrolledtext.ScrolledText(root, wrap=tk.WORD, height=5, width=70,
 search_entry.pack(pady=5)
 
 # Create the buttons and result limit input in a row
-button_frame = ttk.Frame(root)
+style = ttk.Style()
+style.configure("Custom.TFrame", background="#FEF9E1")
+button_frame = ttk.Frame(root, style="Custom.TFrame")
 button_frame.pack(pady=10)
 
-search_button = ttk.Button(button_frame, text="Search", command=search_papers)
-search_button.grid(row=0, column=0, padx=5)
+clear_input_button = tk.Button(button_frame, text="Clear Input", command=lambda: search_entry.delete(1.0, tk.END), bg="#6D2323", fg="#FEF9E1", font=("Arial", 10, "bold"))
+clear_input_button.grid(row=0, column=0, padx=5)
 
-clear_input_button = ttk.Button(button_frame, text="Clear Input", command=lambda: search_entry.delete(1.0, tk.END))
-clear_input_button.grid(row=0, column=1, padx=5)
+clear_output_button = tk.Button(button_frame, text="Clear Output", command=lambda: result_field.delete(1.0, tk.END), bg="#6D2323", fg="#FEF9E1", font=("Arial", 10, "bold"))
+clear_output_button.grid(row=0, column=1, padx=5)
 
-clear_output_button = ttk.Button(button_frame, text="Clear Output", command=lambda: result_field.delete(1.0, tk.END))
-clear_output_button.grid(row=0, column=2, padx=5)
-
-result_limit_label = tk.Label(button_frame, text="Results Limit:")
-result_limit_label.grid(row=0, column=3, padx=5)
-
+result_limit_label = tk.Label(button_frame, text="Results Limit:", bg="#FEF9E1", fg="#000")
+result_limit_label.grid(row=0, column=2, padx=5)
 result_limit_entry = tk.Entry(button_frame, width=5, bg="#E5D0AC")
-result_limit_entry.grid(row=0, column=4, padx=5)
+result_limit_entry.grid(row=0, column=3, padx=5)
 result_limit_entry.insert(0, "30")
+
+search_button = tk.Button(button_frame, text="Search", command=search_papers, bg="#6D2323", fg="#FEF9E1", font=("Arial", 10, "bold"))
+search_button.grid(row=0, column=4, padx=5)
+
+clean_input_button = tk.Button(button_frame, text="Clean", command=clean_input, bg="#6D2323", fg="#FEF9E1", font=("Arial", 10, "bold"))
+clean_input_button.grid(row=0, column=5, padx=5)
 
 # Create the result field (a scrolled text widget)
 result_label = tk.Label(root, text="Search Results:", bg="#FEF9E1", fg="#000")
 result_label.pack(pady=5)
-result_field = scrolledtext.ScrolledText(root, wrap=tk.WORD, height=20, width=70, bg="#E5D0AC")
+result_field = scrolledtext.ScrolledText(root, wrap=tk.WORD, height=10, width=70, bg="#E5D0AC")
 result_field.pack(pady=5)
+
 
 # Run the application
 root.mainloop()
