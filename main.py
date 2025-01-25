@@ -49,13 +49,14 @@ def search_papers():
             for idx, result in enumerate(search.results(), start=1):
                 title = result.title
                 url = result.entry_id
-                doi = result.doi if result.doi else "DOI not available"
-                sci_hub_url = f"https://sci-hub.se/{result.doi}" if result.doi else "Sci-Hub link not available"
+                doi = result.doi if result.doi else None
+                sci_hub_url = f"https://sci-hub.se/{result.doi}" if result.doi else None
 
                 result_field.insert(tk.END, f"{idx}. {title}\n")
-                result_field.insert(tk.END, f"DOI: {doi}\n")
-                result_field.insert(tk.END, f"{url}\n", ("link", url))
-                result_field.insert(tk.END, f"{sci_hub_url}\n\n", ("link", sci_hub_url))
+                if doi:
+                    result_field.insert(tk.END, f"DOI: {doi}\n")
+                    result_field.insert(tk.END, f"{sci_hub_url}\n", ("link", sci_hub_url))
+                result_field.insert(tk.END, f"{url}\n\n", ("link", url))
 
             # Make links clickable
             result_field.tag_configure("link", foreground="#6D2323", underline=True)
