@@ -1,6 +1,6 @@
 import re
 import tkinter as tk
-from tkinter import ttk, scrolledtext, PhotoImage
+from tkinter import ttk, scrolledtext, Frame, Canvas
 import arxiv
 import threading
 import sys
@@ -116,50 +116,58 @@ def deep_clean_input():
 root = tk.Tk()
 root.iconbitmap(resource_path("icon.ico"))
 root.title("Search Research")
-root.geometry(f"800x800")
+root.geometry(f"800x500")
+
+
+# main
+main_frame = Frame(root)
+main_frame.pack(fill="both", expand=1)
+
+# canvas
+my_canvas = Canvas(main_frame)
+my_canvas.pack(side="left", fill="both", expand=1)
+
+# scrollbar
+my_scrollbar = tk.Scrollbar(main_frame, orient="vertical", command=my_canvas.yview)
+my_scrollbar.pack(side="right", fill="y")
+
+# configure the canvas
+my_canvas.configure(yscrollcommand=my_scrollbar.set)
+my_canvas.bind(
+    "<Configure>", lambda e: my_canvas.configure(scrollregion=my_canvas.bbox("all"))
+)
+
+second_frame = Frame(my_canvas, width=1000, height=100)
 
 # Style the application
-root.configure(bg="#FEF9E1")
+second_frame.configure(bg="#FEF9E1")
 style = ttk.Style()
 style.configure("Custom.TFrame", background="#FEF9E1")
 image = ImageTk.PhotoImage(Image.open(resource_path("icon.ico")).resize((128, 128)))
 
-# Create a canvas
-canvas = tk.Canvas(root)
-canvas.pack(side="left", fill="both", expand=True)
-
-# Create a scrollbar
-scrollbar = ttk.Scrollbar(root, orient="vertical", command=canvas.yview)
-scrollbar.pack(side="right", fill="y")
-
-# Configure the canvas
-canvas.configure(yscrollcommand=scrollbar.set)
-canvas.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-
-# Create a frame inside the canvas
-frame = ttk.Frame(canvas)
-canvas.create_window((0, 0), window=frame, anchor="nw")
-
-
 # Add title and subtitle
-tk.Label(root, image=image, bg="#FEF9E1").pack(pady=(30, 0))
+tk.Label(second_frame, image=image, bg="#FEF9E1").pack(pady=(30, 0))
 
 title_label = tk.Label(
-    root, text="Search Research", font=("Arial", 32, "bold"), bg="#FEF9E1", fg="#6D2323"
+    second_frame,
+    text="Search Research",
+    font=("Arial", 32, "bold"),
+    bg="#FEF9E1",
+    fg="#6D2323",
 )
 title_label.pack(pady=(0, 0))
 subtitle_label = tk.Label(
-    root,
+    second_frame,
     text="Search for research papers with ease",
     font=("Arial", 12),
     bg="#FEF9E1",
     fg="#000",
 )
 subtitle_label.pack(pady=(1, 10))
-ttk.Separator(root, orient="horizontal").pack(fill="x", padx=50, pady=(0, 10))
+ttk.Separator(second_frame, orient="horizontal").pack(fill="x", padx=50, pady=(0, 10))
 
 # Search Actions and Label
-input_action_bar = ttk.Frame(root, style="Custom.TFrame")
+input_action_bar = ttk.Frame(second_frame, style="Custom.TFrame")
 input_action_bar.pack(pady=(0, 10))
 tk.Label(
     input_action_bar,
@@ -179,12 +187,12 @@ tk.Button(
 
 # Search Entry
 search_entry = scrolledtext.ScrolledText(
-    root, wrap=tk.WORD, height=5, width=70, bg="#E5D0AC"
+    second_frame, wrap=tk.WORD, height=5, width=70, bg="#E5D0AC"
 )
 search_entry.pack(pady=5)
 
 # Action Bar
-action_bar = ttk.Frame(root, style="Custom.TFrame")
+action_bar = ttk.Frame(second_frame, style="Custom.TFrame")
 action_bar.pack(pady=10)
 tk.Button(
     action_bar,
@@ -220,23 +228,23 @@ search_button.grid(row=0, column=4, padx=5)
 
 # Description
 tk.Label(
-    root,
+    second_frame,
     text='"Clean" Removes special characters from the search query.',
     font=("Arial", 10),
     bg="#FEF9E1",
     fg="#000",
 ).pack(pady=(1, 5))
 tk.Label(
-    root,
+    second_frame,
     text='"Deep Clean" Removes special characters, numbers, and multiple spaces from the search query.',
     font=("Arial", 10),
     bg="#FEF9E1",
     fg="#000",
 ).pack(pady=(1, 10))
-ttk.Separator(root, orient="horizontal").pack(fill="x", padx=50, pady=(0, 10))
+ttk.Separator(second_frame, orient="horizontal").pack(fill="x", padx=50, pady=(0, 10))
 
 # Output Actions and Label
-output_action_bar = ttk.Frame(root, style="Custom.TFrame")
+output_action_bar = ttk.Frame(second_frame, style="Custom.TFrame")
 output_action_bar.pack(pady=(0, 10))
 tk.Label(
     output_action_bar,
@@ -256,10 +264,26 @@ tk.Button(
 
 
 result_field = scrolledtext.ScrolledText(
-    root, wrap=tk.WORD, height=10, width=70, bg="#E5D0AC"
+    second_frame, wrap=tk.WORD, height=10, width=70, bg="#E5D0AC"
 )
-result_field.pack(pady=5)
+result_field.pack(pady=(5, 0))
+tk.Label(
+    second_frame,
+    text="Note: Click on the DOI or arXiv link to open the paper in your browser.",
+    font=("Arial", 10),
+    bg="#FEF9E1",
+    fg="#000",
+).pack(pady=(3, 0))
+ttk.Separator(second_frame, orient="horizontal").pack(fill="x", padx=50, pady=(10, 20))
+tk.Label(
+    second_frame,
+    text="Version 1.2.0 | Last Updated on February 2025",
+    font=("Arial", 10),
+    bg="#FEF9E1",
+    fg="#000",
+).pack(pady=(0, 30))
 
 
 # Run the application
+my_canvas.create_window((0, 0), window=second_frame, anchor="nw", width=800)
 root.mainloop()
