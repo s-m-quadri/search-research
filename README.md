@@ -2,7 +2,7 @@
 [![sr](https://github.com/user-attachments/assets/d200809c-68ef-4b08-b1b6-ab38fb7bd1e2)
 ](https://s-m-quadri.gitlab.io/projects/search-research/)
 
-# Search Research [v1.1.0](https://s-m-quadri.gitlab.io/projects/search-research/)
+# Search Research [v1.2](https://s-m-quadri.gitlab.io/projects/search-research/)
 
 A lightweight and user-friendly application to search for research papers from the **arXiv** repository with ease.  
 
